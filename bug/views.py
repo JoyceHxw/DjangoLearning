@@ -64,4 +64,4 @@ class RegisterModelForm(forms.ModelForm):
 def register(request):
     # 用户信息注册
     form=RegisterModelForm()
-    return render(request,'register.html',{'form':form})
+    return render(request,'bug/register.html',{'form':form})

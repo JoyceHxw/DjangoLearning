@@ -1,0 +1,47 @@
+{% extends 'layout/basic.html' %}
+{% comment %} 继承母模板 {% endcomment %}
+
+{% block title %}
+用户注册
+{% endblock %}
+
+{% block css %}
+<style>
+    .account{
+        margin: 0 auto;
+        width: 400px;
+    }
+    h1{
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class='account'>
+    <h1>注册</h1>
+    <form>
+        {% for field in form %}
+            {% if field.name == 'code' %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <div class="clearfix">
+                    <div class='col-md-6' style="padding-left: 0;"> {{ field }}</div>
+                    <div class='col-md-6' style="padding-right: 0;"><input type="button" class="btn btn-default" value="点击获取验证码"></div>
+                </div>
+            </div>
+            {% else %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endif %}
+        {% endfor %}
+    </form>
+    <div class='row'>
+        <div class='col-xs-3'>
+            <input id="btnSubmit" type="button" class="btn btn-primary" value="注  册"/>
+        </div>
+    </div>
+</div>
+{% endblock %}
