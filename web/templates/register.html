@@ -1,4 +1,6 @@
 {% extends 'layout/basic.html' %}
+{% load static %}
+
 {% comment %} 继承母模板 {% endcomment %}
 
 {% block title %}
@@ -6,15 +8,7 @@
 {% endblock %}
 
 {% block css %}
-<style>
-    .account{
-        margin: 0 auto;
-        width: 400px;
-    }
-    h1{
-        text-align: center;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -25,15 +19,21 @@
             {% if field.name == 'code' %}
             <div class="form-group">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                <div class="clearfix">
-                    <div class='col-md-6' style="padding-left: 0;"> {{ field }}</div>
-                    <div class='col-md-6' style="padding-right: 0;"><input type="button" class="btn btn-default" value="点击获取验证码"></div>
+                <div class='row'>
+                    <div class='col-xs-7'>
+                        {{ field }}
+                        <span class="error-msg"></span>
+                    </div>
+                    <div class='col-xs-5'>
+                        <input id="btnSms" type="button" class="btn btn-default" value="点击获取验证码"/>
+                    </div>
                 </div>
             </div>
             {% else %}
             <div class="form-group">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{ field }}
+                <span class="error-msg"></span>
             </div>
             {% endif %}
         {% endfor %}
@@ -44,4 +44,33 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    // 点击发送发送验证码
+    $(function (){
+        bindClickBtnSms();
+    });
+    function bindClickBtnSms(){
+        $('#btnSms').click(function () {
+            //再次点击时先清空上次的错误信息
+            $('.error-msg').empty();
+
+            //获取用户手机号
+            var mobilePhone=$('#id_mobile_phone').val();
+            // 发送ajax请求，把⼿机号发送过去
+            $.ajax({
+                //生成一个URL，指向名为send_sms的视图函数。
+                url: "{% url 'send_sms' %}", // 等价于 /send/sms/
+                type: "GET",
+                data: {mobile_phone: mobilePhone, tpl: "register"},
+                dataType: "JSON", // 将服务端返回的数据反序列化为字典
+                success: function (res) {
+                    console.log(res)
+                }
+            })
+        })
+    }
+</script>
 {% endblock %}
