@@ -1,0 +1,41 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.css' %}">
+    <style>
+        .account{
+            margin: 0 auto;
+            text-align: center;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class='account'>
+        <h1>注册</h1>
+        <form>
+            {% for field in form %}
+                {% if field.name == 'code' %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <div class="clearfix">
+                        <div class='col-md-6' style="padding-left: 0;"> {{ field }}</div>
+                        <div class='col-md-6' style="padding-right: 0;"><input type="button" class="btn btn-default" value="点击获取验证码"></div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+                {% endif %}
+            {% endfor %}
+        </form>
+    </div>
+</body>
+</html>
