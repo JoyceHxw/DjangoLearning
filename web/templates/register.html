@@ -21,7 +21,7 @@
 {% block content %}
 <div class='account'>
     <h1>注册</h1>
-    <form>
+    <form id="regForm">
         {% for field in form %}
             {% if field.name == 'code' %}
             <div class="form-group">
@@ -55,10 +55,11 @@
 
 {% block js %}
 <script>
-    // 点击发送发送验证码
     $(function (){
         bindClickBtnSms();
+        bindClickSubmit();
     });
+    // 点击发送发送验证码
     function bindClickBtnSms(){
         $('#btnSms').click(function () {
             //再次点击时先清空上次的错误信息
@@ -102,6 +103,22 @@
                 $smsBtn.val('点击获取验证码').prop('disabled',false);
             }
         },1000)
+    }
+    //注册
+    function bindClickSubmit(){
+        $('#btnSubmit').click(function (){
+            $('.error-msg').empty();
+            //收集表单数据发送到后台
+            $.ajax({
+                url:"{% url 'register' %}",
+                type:"POST",
+                data: $('#regForm').serialize(), //获取所有字段数据+csrf token
+                dataType: "JSON"
+                success: function (res) {
+                    console.log(res);
+                }
+            })
+        })
     }
 </script>
 {% endblock %}

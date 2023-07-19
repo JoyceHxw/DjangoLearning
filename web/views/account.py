@@ -5,8 +5,15 @@ from django.http import JsonResponse
 
 def register(request):
     # 用户信息注册
-    form=RegisterModelForm()
-    return render(request,'register.html', {'form':form})
+    if request.method=='GET':
+        form=RegisterModelForm(request)
+        return render(request,'register.html', {'form':form})
+    form=RegisterModelForm(data=request.POST)
+    if form.is_valid():
+        # 保存数据
+        return JsonResponse({'statue':True, 'data':'/web/login/'})
+    return JsonResponse({'status':False, 'error':form.errors})
+
 
 def send_sms(request):
     """ 
