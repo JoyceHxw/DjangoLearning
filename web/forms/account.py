@@ -47,7 +47,7 @@ class SendSmsForm(forms.Form):
         label="手机号",
         validators=[RegexValidator(r'^(1[3|4|5|6|7|8|9])\d{9}$', '⼿机号格式错误'),]
     )
-    print(mobile_phone.label)
+
     def __init__(self,request,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.request=request

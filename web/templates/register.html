@@ -9,6 +9,13 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/account.css' %}">
+<style>
+    .error-msg {
+    color: red;
+    position: absolute;
+    font-size: 13px;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -67,10 +74,34 @@
                 data: {mobile_phone: mobilePhone, tpl: "register"},
                 dataType: "JSON", // 将服务端返回的数据反序列化为字典
                 success: function (res) {
-                    console.log(res)
+                    //console.log(res)
+                    if (res.status){
+                        //启动倒计时
+                        sendSmsRemind();
+                    }
+                    else{
+                        //输出错误信息在span
+                        $.each(res.error, function (key,value){
+                            $("#id_"+key).next().text(value[0]);
+                        })
+                    }
                 }
             })
         })
+    }
+    //倒计时
+    function sendSmsRemind(){
+        var $smsBtn=$('#btnSms');
+        $smsBtn.prop('disabled',true); //禁用
+        var time=60;
+        var remind=setInterval(function (){
+            $smsBtn.val(time+'秒重新发送');
+            time=time-1;
+            if(time<1){
+                clearInterval(remind);
+                $smsBtn.val('点击获取验证码').prop('disabled',false);
+            }
+        },1000)
     }
 </script>
 {% endblock %}
