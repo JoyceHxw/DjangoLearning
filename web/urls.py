@@ -6,4 +6,5 @@ urlpatterns = [
     path('sms/code/', account.send_sms, name='send_sms'),
     path('login/sms/',account.login_sms, name='login_sms'),
     path('login/',account.login, name='login'),
+    path('image/code',account.image_code, name='image_code'),
 ]
