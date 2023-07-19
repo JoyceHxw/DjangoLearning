@@ -76,7 +76,7 @@
                 data: {mobile_phone: mobilePhone, tpl: "register"},
                 dataType: "JSON", // 将服务端返回的数据反序列化为字典
                 success: function (res) {
-                    console.log(res)
+                    //console.log(res)
                     if (res.status){
                         //启动倒计时
                         sendSmsRemind();
@@ -117,9 +117,8 @@
                 dataType: "JSON",
                 success: function (res) {
                     if(res.status){
-                        console.log("888888");
+                        location.href=res.data;
                         console.log(res.data);
-                        location.href = res.data;
                     }
                     else{
                         $.each(res.error, function (key,value){

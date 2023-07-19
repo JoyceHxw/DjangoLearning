@@ -8,7 +8,9 @@ from utils.tencent.sms import send_sms_single
 
 from django.shortcuts import render,HttpResponse
 
-class RegisterModelForm(forms.ModelForm):
+from web.views.bootStrap import BootStrap
+
+class RegisterModelForm(BootStrap, forms.ModelForm):
         # 正则表达式校验
         mobile_phone=forms.CharField(
             label="手机号",
@@ -49,9 +51,9 @@ class RegisterModelForm(forms.ModelForm):
         def __init__(self,request, *args, **kwargs):
             super().__init__(*args,**kwargs)
             self.request=request
-            for name, field in self.fields.items():
-                field.widget.attrs['class']='form-control'
-                field.widget.attrs['placeholder']='请输入%s'%(field.label,)
+            # for name, field in self.fields.items():
+            #     field.widget.attrs['class']='form-control'
+            #     field.widget.attrs['placeholder']='请输入%s'%(field.label,)
         
         def clean_username(self):
             username = self.cleaned_data["username"]
@@ -119,12 +121,16 @@ class SendSmsForm(forms.Form):
         tpl = self.request.GET.get('tpl')
         template_id = settings.TENCENT_SMS_TEMPLATE.get(tpl)
         if not template_id:
-            return ValidationError('模板不存在')
+            raise ValidationError('模板不存在')
         
         # 手机号是否存在
         exists=models.UserInfo.objects.filter(mobile_phone=mobile_phone).exists()
-        if exists:
-            return ValidationError('手机号已存在')
+        if tpl=='login':
+            if not exists:
+                raise ValidationError('手机号不存在')
+        else:
+            if exists:
+                raise ValidationError('手机号已存在')
         
         # 生成验证码
         code = random.randrange(1000, 9999)
@@ -136,4 +142,40 @@ class SendSmsForm(forms.Form):
         self.request.session.set_expiry(60)
         
         return mobile_phone
-        
+
+# 登录验证
+class LoginSmsForm(BootStrap,forms.Form):
+    mobile_phone=forms.CharField(
+        label='手机号',
+        validators=[RegexValidator(r'^(1[3|4|5|6|7|8|9])\d{9}$', '⼿机号格式错误'),]
+    )
+    code=forms.CharField(
+        label='验证码',
+        widget=forms.TextInput()
+    )
+
+    def __init__(self, request, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.request = request
+    
+    def clean_mobile_phone(self):
+        mobile_phone = self.cleaned_data['mobile_phone']
+        exists = models.UserInfo.objects.filter(mobile_phone=mobile_phone).exists()
+        if not exists:
+            raise ValidationError('⼿机号不存在')
+        return mobile_phone
+
+    def clean_code(self):
+        code = self.cleaned_data['code']
+        mobile_phone = self.cleaned_data.get('mobile_phone')
+        # ⼿机号不存在，则验证码⽆需再校验
+        if not mobile_phone:
+            return code
+
+        session_code = self.request.session['code'] # 从session中获取验证码
+        if not session_code:
+            raise ValidationError('验证码失效或未发送，请重新发送')
+
+        if code != session_code:
+            raise ValidationError('验证码错误，请重新输⼊')
+        return code
