@@ -8,7 +8,7 @@ def register(request):
     if request.method=='GET':
         form=RegisterModelForm(request)
         return render(request,'register.html', {'form':form})
-    form=RegisterModelForm(data=request.POST)
+    form=RegisterModelForm(request,data=request.POST)
     if form.is_valid():
         # 保存数据
         return JsonResponse({'statue':True, 'data':'/web/login/'})
