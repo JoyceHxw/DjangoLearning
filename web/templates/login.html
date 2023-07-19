@@ -45,9 +45,12 @@
             </div>
             {% endif %}
         {% endfor %}
+        <div style="float: right">
+            <a href="{% url 'login_sms' %}">短信验证码登录</a>
+        </div>
         <div class='row'>
             <div class='col-xs-3'>
-                <input id="btnSubmit" type="button" class="btn btn-primary" value="登  录"/>
+                <input id="btnSubmit" type="submit" class="btn btn-primary" value="登  录"/>
             </div>
         </div>
     </form>

@@ -38,7 +38,12 @@ def login_sms(request):
         return render(request,'login_sms.html',{'form':form})
     form=LoginSmsForm(request,data=request.POST)
     if form.is_valid():
-        return JsonResponse({'status':True, 'data':'/index/'})
+        mobile_phone=form.cleaned_data['mobile_phone']
+        user_obj=models.UserInfo.objects.fileter(mobile_phone=mobile_phone).first()
+        request.session['user_id']=user_obj.id
+        request.session['username']=user_obj.username
+        request.session.set_expiry(60*60*24*14)
+        return JsonResponse({'status':True, 'data':'/web/index/'})
     return JsonResponse({'status':False, 'error':form.errors})
 
 def login(request):
@@ -51,6 +56,9 @@ def login(request):
         password=form.cleaned_data['password']
         user_object=models.UserInfo.objects.filter(Q(email=username)|Q(mobile_phone=username)).filter(password=password).first()
         if user_object:
+            request.session['user_id']=user_object.id
+            request.session['username']=user_object.username
+            request.session.set_expiry(60*60*24*14)
             return redirect('/web/index/')
         form.add_error('username','用户名或密码错误')
     return render(request,'login.html',{'form':form})
@@ -63,3 +71,7 @@ def image_code(request):
     stream=BytesIO()
     image_obj.save(stream,'png')
     return HttpResponse(stream.getvalue())
+
+def logout(request):
+    request.session.flush()
+    return redirect('/web/index/')
