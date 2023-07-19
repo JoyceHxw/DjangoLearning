@@ -58,9 +58,10 @@
                     <li><a href="{% url 'logout' %}">退出</a></li>
                   </ul>
                 </li>
+              {% else %}
+                <li><a href="{% url 'login' %}">登录</a></li> 
+                <li><a href="{% url 'register' %}">注册</a></li> 
               {% endif %}
-              <li><a href="{% url 'login' %}">登录</a></li> 
-              <li><a href="{% url 'register' %}">注册</a></li> 
             </ul>
           </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->

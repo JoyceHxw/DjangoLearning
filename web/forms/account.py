@@ -174,6 +174,7 @@ class LoginSmsForm(BootStrap,forms.Form):
 
         session_code = self.request.session['code'] # 从session中获取验证码
         if not session_code:
+            print("*****")
             raise ValidationError('验证码失效或未发送，请重新发送')
 
         if code != session_code:
@@ -205,6 +206,7 @@ class LoginForm(BootStrap,forms.Form):
         if not session_code:
             raise ValidationError('验证码已过期，请重新获取')
         if code.strip().upper()!=session_code.strip().upper():
+            print("****")
             raise ValidationError('验证码输入错误')
         return code
     

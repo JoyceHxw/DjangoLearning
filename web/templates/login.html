@@ -4,7 +4,7 @@
 {% comment %} 继承母模板 {% endcomment %}
 
 {% block title %}
-用户注册
+用户登录
 {% endblock %}
 
 {% block css %}
@@ -21,28 +21,28 @@
 {% block content %}
 <div class='account'>
     <h1>用户登录</h1>
-    <form id="regForm" method="POST" novalidate>
+    <form id="loginForm" method="POST" novalidate>
         {% csrf_token %}
         {% for field in form %}
             {% if field.name == 'code' %}
-            <div class="form-group">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                <div class='row'>
-                    <div class='col-xs-7'>
-                        {{ field }}
-                        <span class="error-msg"></span>
-                    </div>
-                    <div class='col-xs-5'>
-                        <img src="{% url 'image_code' %}" id='imageCode' title="点击更换图片">
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    <div class='row'>
+                        <div class='col-xs-7'>
+                            {{ field }}
+                            <span class="error-msg">{{ field.errors.0 }}</span>
+                        </div>
+                        <div class='col-xs-5'>
+                            <img src="{% url 'image_code' %}" id='imageCode' alt="图片验证码" title="点击更换图片">
+                        </div>
                     </div>
                 </div>
-            </div>
             {% else %}
-            <div class="form-group">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-                <span class="error-msg"></span>
-            </div>
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    <span class="error-msg">{{ field.errors.0 }}</span>
+                </div>
             {% endif %}
         {% endfor %}
         <div style="float: right">

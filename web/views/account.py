@@ -34,15 +34,15 @@ def send_sms(request):
 def login_sms(request):
     if request.method=='GET':
         form=LoginSmsForm(request)
-        print("****")
         return render(request,'login_sms.html',{'form':form})
     form=LoginSmsForm(request,data=request.POST)
     if form.is_valid():
         mobile_phone=form.cleaned_data['mobile_phone']
-        user_obj=models.UserInfo.objects.fileter(mobile_phone=mobile_phone).first()
+        user_obj=models.UserInfo.objects.filter(mobile_phone=mobile_phone).first()
         request.session['user_id']=user_obj.id
         request.session['username']=user_obj.username
         request.session.set_expiry(60*60*24*14)
+        print("***")
         return JsonResponse({'status':True, 'data':'/web/index/'})
     return JsonResponse({'status':False, 'error':form.errors})
 
