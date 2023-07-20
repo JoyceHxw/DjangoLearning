@@ -36,8 +36,10 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
             <ul class="nav navbar-nav">
-                <li><a href="#">概述</a></li>
-                <li><a href="#">wiki</a></li>
+                {% if request.project %}
+                    <li><a href="#">概述</a></li>
+                    <li><a href="{% url 'wiki' project_id=request.project.id %}">wiki</a></li>
+                {% endif %}
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

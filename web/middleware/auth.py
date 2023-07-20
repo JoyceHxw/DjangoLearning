@@ -23,3 +23,22 @@ class AuthMiddleware(MiddlewareMixin):
         if obj.end_datetime and obj.end_datetime<current_datetime:
             obj=models.Transaction.objects.filter(user=user_obj,status=2,price_policy_category=1).first()
         request.price_policy=obj.price_policy
+    
+    def process_view(self,request, view, args, kwargs,):
+        # 判断URL是否是以manage开头，如果是则判断项⽬ID是否是我创建 or 参与
+        if not request.path_info.startswith('/web/manage/'):
+            return
+        project_id = kwargs.get('project_id')
+        # 是否是我创建的
+        project_object = models.Project.objects.filter(creator=request.user_obj, id=project_id).first()
+        if project_object:
+            # 是我创建的项⽬的话，我就让他通过
+            request.project = project_object
+            return
+        # 是否是我参与的项⽬
+        project_user_object = models.ProjectUser.objects.filter(user=request.user_obj, project_id=project_id).first()
+        if project_user_object:
+            # 是我参与的项⽬
+            request.project = project_user_object.project
+            return
+        return redirect('project_list')

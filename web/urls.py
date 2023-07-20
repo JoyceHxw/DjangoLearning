@@ -1,5 +1,5 @@
-from django.urls import path
-from web.views import account,home,project
+from django.urls import path,include
+from web.views import account,home,project,manage
 
 urlpatterns = [
     # 注册功能
@@ -15,4 +15,8 @@ urlpatterns = [
     path('project/list/',project.project_list,name='project_list'),
     path('project/star/<str:project_type>/<int:project_id>/',project.project_star,name='project_star'),
     path('project/unstar/<str:project_type>/<int:project_id>/',project.project_unstar,name='project_unstar'),
+    # 项目管理
+    path('manage/<int:project_id>/',include([
+        path('wiki/',manage.wiki,name='wiki'),
+    ]))
 ]
