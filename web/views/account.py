@@ -12,8 +12,11 @@ from django.db.models import Q
 import uuid
 from datetime import datetime
 
+# request参数是一个包含了客户端请求信息的HttpRequest对象
 def register(request):
     # 用户信息注册
+    # GET请求：数据包含在URL的查询参数中，出现在URL的末尾
+    # POST请求：数据包含在请求体中，并不显示在URL中
     if request.method=='GET':
         form=RegisterModelForm(request)
         return render(request,'register.html', {'form':form})

@@ -3,6 +3,7 @@ from web.views import account,home,project,manage
 
 urlpatterns = [
     # 注册功能
+    # path参数：route：匹配请求的URL，view：匹配URL时调用，name：URL的名称，用于在其他地方引用
     path('register/',account.register, name='register'),
     path('sms/code/', account.send_sms, name='send_sms'),
     path('login/sms/',account.login_sms, name='login_sms'),

@@ -66,6 +66,9 @@ class Project(models.Model):
     use_space = models.BigIntegerField(verbose_name='项⽬已使⽤空间', default=0, help_text='字节')
     star = models.BooleanField(verbose_name='星标', default=False)
     join_count = models.SmallIntegerField(verbose_name='参与⼈数', default=1)
+    # 这是一个外键字段，用于关联 UserInfo 模型中的用户。to='UserInfo' 表示关联到 UserInfo 模型，
+    # on_delete=models.CASCADE 表示级联删除，当关联的用户被删除时，与之关联的项目也会被删除。
+    # 这里的外键字段 creator 与 UserInfo 模型的关联字段是 id，它是 UserInfo 模型的默认主键字段。
     creator = models.ForeignKey(verbose_name='创建者', to='UserInfo', on_delete=models.CASCADE)
     create_datetime = models.DateTimeField(verbose_name='创建时间', auto_now_add=True)
 

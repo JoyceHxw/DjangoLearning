@@ -9,6 +9,7 @@ from datetime import datetime
 class AuthMiddleware(MiddlewareMixin):
     def process_request(self,request):
         # 用户信息
+        # 从会话中获取用户的 user_id，如果不存在则返回默认值 0。
         user_id=request.session.get('user_id',0)
         user_obj=models.UserInfo.objects.filter(id=user_id).first()
         request.user_obj=user_obj

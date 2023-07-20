@@ -22,13 +22,20 @@
 <div class='account'>
     <h1>注册</h1>
     <form id="regForm" method="POST" novalidate>
+        {% comment %} CSRF 令牌是一个随机生成的字符串，用于验证用户提交的表单是否合法。
+        每当用户在浏览器中访问包含表单的页面时，Django 会自动为该页面生成一个 CSRF 令牌，并将其存储在用户的会话中。
+        然后，当用户提交表单时，Django 会验证表单中的 CSRF 令牌是否与会话中存储的令牌匹配，以确保表单提交是合法的。 {% endcomment %}
         {% csrf_token %}
         {% for field in form %}
             {% if field.name == 'code' %}
             <div class="form-group">
+                {% comment %} 这是表单字段的标签元素，用于显示字段的标签文字。 {% endcomment %}
+                {% comment %} <label> 元素的 for 属性是与表单字段的 id 属性相对应的，它用于指示该标签与特定的表单字段相关联 {% endcomment %}
+                {% comment %} 这个 id 属性值是 Django 自动生成的，用于在后台与表单字段进行关联。  {% endcomment %}
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 <div class='row'>
                     <div class='col-xs-7'>
+                        {% comment %} 这是表单字段本身，它会在页面中生成相应的 HTML 表单元素，例如输入框、下拉列表等。 {% endcomment %}
                         {{ field }}
                         <span class="error-msg"></span>
                     </div>
