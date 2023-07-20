@@ -1,5 +1,62 @@
 {% extends 'layout/manage.html' %}
 
+{% block css %}
+<style>
+    .panel-body {
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .panel-body > .item {
+        border-radius: 6px;
+        width: 228px;
+        border: 1px solid #dddddd;
+        margin: 20px 10px;
+
+    }
+
+    .panel-body > .item:hover {
+        border: 1px solid #f0ad4e;
+    }
+
+    .panel-body > .item > .title {
+        height: 104px;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        font-size: 15px;
+        text-decoration: none;
+    }
+
+    .panel-body > .item > .info {
+        padding: 10px 10px;
+
+        display: flex;
+        justify-content: space-between;
+
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+        color: #8c8c8c;
+
+    }
+
+    .panel-body > .item > .info a {
+        text-decoration: none;
+    }
+
+    .panel-body > .item > .info .fa-star {
+        font-size: 18px;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid project">
     <div style="margin: 10px 0;">
@@ -7,8 +64,82 @@
             <i class="fa fa-plus-circle" aria-hidden="true"></i> 新建项⽬
         </a>
     </div>
- </div>
+</div>
 
+{% comment %} 展示列表 {% endcomment %}
+<div class="panel panel-default">
+    <div class="panel-heading"><i class="fa fa-star" aria-hidden="true"></i> 星标</div>
+    <div class="panel-body">
+        {% for item in project_dict.star %}
+            <div class="item">
+                <a href="#" class="title"
+                   style="background-color: {{ item.value.get_color_display }};">{{ item.value.name }}</a>
+                <div class="info">
+                    <div>
+                        <a href="#">
+                            <i class="fa fa-star" aria-hidden="true" style="color: #f0ad4e;"></i>
+                        </a>
+                        <span>{{ item.value.creator.username }}</span>
+                    </div>
+                    <div>
+                        <i class="fa fa-user-o" aria-hidden="true"></i>
+                        <span>{{ item.value.join_count }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading"><i class="fa fa-list" aria-hidden="true"></i> 我创建</div>
+    <div class="panel-body">
+        {% for item in project_dict.my %}
+            <div class="item">
+                <a href="#" class="title"
+                   style="background-color: {{ item.get_color_display }};">{{ item.name }}</a>
+                <div class="info">
+                    <div>
+                        <a href="#">
+                            <i class="fa fa-star" aria-hidden="true" style="color: #d5d5d5;"></i>
+                        </a>
+                        <span>{{ item.creator.username }}</span>
+                    </div>
+                    <div>
+                        <i class="fa fa-user-o" aria-hidden="true"></i>
+                        <span>{{ item.join_count }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading"><i class="fa fa-handshake-o" aria-hidden="true"></i> 我参与的</div>
+    <div class="panel-body">
+        {% for item in project_dict.join %}
+            <div class="item">
+                <a href="#" class="title"
+                   style="background-color: {{ item.get_color_display }};">{{ item.name }}</a>
+                <div class="info">
+                    <div>
+                        <a href="#">
+                            <i class="fa fa-star" aria-hidden="true" style="color: #d5d5d5;"></i>
+                        </a>
+                        <span>{{ item.creator.username }}</span>
+                    </div>
+                    <div>
+                        <i class="fa fa-user-o" aria-hidden="true"></i>
+                        <span>{{ item.join_count }}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% comment %} 动态框 {% endcomment %}
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
