@@ -76,7 +76,7 @@
                    style="background-color: {{ item.value.get_color_display }};">{{ item.value.name }}</a>
                 <div class="info">
                     <div>
-                        <a href="#">
+                        <a href="{% url 'project_unstar' project_type=item.type project_id=item.value.id %}">
                             <i class="fa fa-star" aria-hidden="true" style="color: #f0ad4e;"></i>
                         </a>
                         <span>{{ item.value.creator.username }}</span>
@@ -100,7 +100,7 @@
                    style="background-color: {{ item.get_color_display }};">{{ item.name }}</a>
                 <div class="info">
                     <div>
-                        <a href="#">
+                        <a href="{% url 'project_star' project_type='my' project_id=item.id %}">
                             <i class="fa fa-star" aria-hidden="true" style="color: #d5d5d5;"></i>
                         </a>
                         <span>{{ item.creator.username }}</span>
@@ -124,7 +124,7 @@
                    style="background-color: {{ item.get_color_display }};">{{ item.name }}</a>
                 <div class="info">
                     <div>
-                        <a href="#">
+                        <a href="{% url 'project_star' project_type='join' project_id=item.id %}">
                             <i class="fa fa-star" aria-hidden="true" style="color: #d5d5d5;"></i>
                         </a>
                         <span>{{ item.creator.username }}</span>

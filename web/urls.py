@@ -13,5 +13,6 @@ urlpatterns = [
     path('index/',home.index,name='index'),
     # 项目列表
     path('project/list/',project.project_list,name='project_list'),
-    
+    path('project/star/<str:project_type>/<int:project_id>/',project.project_star,name='project_star'),
+    path('project/unstar/<str:project_type>/<int:project_id>/',project.project_unstar,name='project_unstar'),
 ]
