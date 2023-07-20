@@ -42,7 +42,6 @@ def login_sms(request):
         request.session['user_id']=user_obj.id
         request.session['username']=user_obj.username
         request.session.set_expiry(60*60*24*14)
-        print("***")
         return JsonResponse({'status':True, 'data':'/web/index/'})
     return JsonResponse({'status':False, 'error':form.errors})
 
