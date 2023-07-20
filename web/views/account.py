@@ -9,6 +9,9 @@ from io import BytesIO
 from django.shortcuts import redirect, render,HttpResponse
 from django.db.models import Q
 
+import uuid
+from datetime import datetime
+
 def register(request):
     # 用户信息注册
     if request.method=='GET':
@@ -17,7 +20,18 @@ def register(request):
     form=RegisterModelForm(request,data=request.POST)
     if form.is_valid():
         # 保存数据
-        form.save()
+        instance=form.save()
+        # 生成交易记录
+        policy_object=models.PricePolicy.objects.filter(category=1,title='个人免费版').first()
+        models.Transaction.objects.create(
+            status=2,
+            order=str(uuid.uuid4()),
+            user=instance,
+            price_policy=policy_object,
+            count=0,
+            price=0,
+            start_datetime=datetime.now()
+        )
         return JsonResponse({'status':True, 'data':'/web/login'})
     return JsonResponse({'status':False, 'error':form.errors})
 

@@ -8,7 +8,7 @@ from utils.tencent.sms import send_sms_single
 
 from django.shortcuts import render,HttpResponse
 
-from web.views.bootStrap import BootStrap
+from web.forms.bootStrap import BootStrap
 
 class RegisterModelForm(BootStrap, forms.ModelForm):
         # 正则表达式校验
